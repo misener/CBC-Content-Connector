@@ -41,7 +41,7 @@ class MainHandler(webapp2.RequestHandler):
 
         template_values = {
             'audioclips': audioclips,
-            'program': urllib.unquote(program),
+            'program': program,
             'results': number_of_results }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
