@@ -1,15 +1,11 @@
 import os
 import urllib
-
 import webapp2
 import jinja2
-
-
-from google.appengine.api import urlfetch
 import json
 import re
 import logging
-import urllib
+from google.appengine.api import urlfetch
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -17,14 +13,18 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        program = urllib.quote(self.request.get('program', default_value="Spark"))
+        program = self.request.get('program', default_value="Spark")
     	number_of_results = self.request.get('results', default_value="10")
 
-        url = "https://feed.theplatform.com/f/h9dtGB/r3VD0FujBumK?form=json&range=1-%s&sort=pubDate|desc&byCustomValue={show}{%s}" % (number_of_results, program)
+        params = urllib.urlencode(
+            { 'form': 'json',
+              'range': '1-%s' % number_of_results,
+              'sort': 'pubDate|desc',
+              'byCustomValue': '{show}{%s}' % program })
+
+        url = 'http://feed.theplatform.com/f/h9dtGB/r3VD0FujBumK?%s' % params
 
         r = json.loads(urlfetch.fetch(url, deadline=20).content)
-
-        # audioclip id=2381497597&mediaid=2381497585
 
         audioclips = []
 
@@ -39,12 +39,10 @@ class MainHandler(webapp2.RequestHandler):
 
             audioclips.append((audioclipID, mediaID, title))
 
-
         template_values = {
             'audioclips': audioclips,
             'program': urllib.unquote(program),
-            'results': number_of_results,
-        }
+            'results': number_of_results }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
