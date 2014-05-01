@@ -3,58 +3,245 @@
 <html>
   <head>
     <title>The {{ audioclips|length }} most recently uploaded audio clips from {{ program }}</title>
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/flatly/bootstrap.min.css" rel="stylesheet">
+      
+
+      <link rel="stylesheet" type="text/css" href="//getbootstrap.com/examples/sticky-footer/sticky-footer.css">
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+      <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.css" rel="stylesheet">
+
+      <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="/twitter-bootstrap/docs/assets/js/jquery.js"><\/script>')</script>
+
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.2.1/ZeroClipboard.min.js"></script>
+     
   </head>
 
   <body>
-    <form action="/">
-        <label>Show <input name="program" value="{{ program }}"></label>
-        <label>Number of results <input name="results" value="{{ results }}"></label>
-        <input type="submit">
-    </form>
 
-    <h2>Player IDs (desktop)</h2>
+    <!-- Wrap all page content here -->
+    <div id="wrap">
 
-    <ul>
+      <!-- Begin page content -->
+      <div class="container">
+
+        <div class="page-header text-center">
+          <h1>Classy Content Connector</h1>
+        </div>
+
+        <!-- <div class="alert alert-info"><i class="fa fa-clipboard"></i> Click the clipboard icon to copy a player embed code to your computer's clipboard.</div> -->
+
+        <!--<p class="lead">
+        </p> -->
+
+        <form class="form-inline text-center" role="form" action="/"> 
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputEmail2">Show name</label>
+            <input type="text" class="form-control" id="program" name="program" value="{{ program }}" placeholder="Show name">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputPassword2">Password</label>
+            <input type="number" class="form-control" id="results" name="results" value="{{ results }}" placeholder="Number of results">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <hr>
+
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr>
+            <th>
+              Item
+            </th>
+            <th>
+              Desktop
+            </th>
+            <th>
+              Mobile
+            </th>
+            <th>
+              <i class="fa fa-code"></i>
+            </th>
+          </tr>
+          </thead>
+
+
+        {% for audioclip in audioclips %}
+          <tr>
+            <td>
+              {{ audioclip.2 }}
+            </td>
+            <td>
+              {{ audioclip.0 }}
+            </td>
+            <td>
+              {{ audioclip.1 }}
+            </td>
+            <td>
+              <i id="{{ audioclip.0 }}" class="fa fa-clipboard" data-clipboard-text="&lt;!--START {{ audioclip.2 }} AUDIO HERE --&gt;
+&lt;!--#include virtual=&quot;/i/avembed/html/avembed.html?clipId={{ audioclip.0 }}&amp;mediatype=audio&quot;--&gt;
+&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;
+&lt;!--END {{ audioclip.2 }} AUDIO --&gt;" title="Copy embed code to clipboard"></i>
+            </td>
+          </tr>
+
+<!--           <tr>
+            <td colspan="3">
+                        <pre class="prettyprint lang-html">
+&lt;!--START {{ audioclip.2 }} AUDIO HERE --&gt;
+&lt;!--#include virtual="/i/avembed/html/avembed.html?clipId={{ audioclip.0 }}&mediatype=audio"--&gt;
+&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;!--END {{ audioclip.2 }} AUDIO --&gt;</pre>
+            </td>
+          </tr> -->
+        {% endfor %}
+
+
+
+        </table>
+
+        <hr>
+
+        <table class="table table-striped table-hover">
+          <tr>
+            <td nowrap>All Desktop IDs:</td>
+            <td>
+              {% for audioclip in audioclips %}
+              <span class="badge">{{ audioclip.0 }}</span>{% if not loop.last %}, {% endif%}
+              {% endfor %}
+            </td>
+          </tr>
+
+          <tr>
+            <td nowrap>All Mobile IDs:</td>
+            <td>
+              {% for audioclip in audioclips %}
+              <span class="badge">{{ audioclip.1 }}</span>{% if not loop.last %}, {% endif%}
+              {% endfor %}
+            </td>
+          </tr>
+        </table>
+
+
+
+        <!-- <hr> -->
+
+<!--         <h2><i class="fa fa-desktop"></i> Desktop Player IDs </h2>
+
+        <ul class="list-group">
+        {% for audioclip in audioclips %}
+          <li class="list-group-item">
+            <span class="badge">{{ audioclip.0 }}</span>
+            {{ audioclip.2 }}
+          </li>
+        {% endfor %}
+        </ul> -->
+
+<!--         <div class="text-center">
+
+        <p>
+        All Desktop : 
+        {% for audioclip in audioclips %}
+        <span class="badge">{{ audioclip.0 }}</span>{% if not loop.last %}, {% endif%}
+        {% endfor %}
+        </p>
+
+        <hr> -->
+
+<!--         <hr>
+
+        <h2><i class="fa fa-mobile"></i> Mobile Player IDs</h2>
+
+        <ul class="list-group">
+        {% for audioclip in audioclips %}
+          <li class="list-group-item">
+            <span class="badge">{{ audioclip.1 }}</span>
+            {{ audioclip.2 }}
+          </li>
+        {% endfor %}
+        </ul> -->
+
+<!--         <p>
+        All Mobile IDs: 
+        {% for audioclip in audioclips %}
+        <span class="badge">{{ audioclip.1 }}</span>{% if not loop.last %}, {% endif%}
+        {% endfor %}
+        </p>
+
+        </div> -->
+
+
+
+ <!--        <h2><i class="fa fa-code"></i> Standalone Player embed codes</h2>
+
+        {% for audioclip in audioclips %}
+
+          <h3>{{ audioclip.2 }}</h3>
+
+      <textarea class="foo" style="width: 100%;" rows="5">&lt;!--START {{ audioclip.2 }} AUDIO HERE --&gt;
+&lt;!--#include virtual="/i/avembed/html/avembed.html?clipId={{ audioclip.0 }}&mediatype=audio"--&gt;
+&lt;div class="clear"&gt;&lt;/div&gt;
+&lt;!--END {{ audioclip.2 }} AUDIO --&gt;</textarea>
+
+        {% endfor %} -->
+
+
+
+      </div>
+    </div>
+
+
+
+  <div id="push"></div>
+
+
+  <div id="footer">
+    <div class="container text-center">
+      <p class="text-muted credit">Made with <i class="fa fa-heart" style="color: red"></i> by <a href="http://misener.org">Dan Misener</a> in Toronto.</p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+      $(".foo").focus(function() {
+          var $this = $(this);
+          $this.select();
+
+          // Work around Chrome's little problem
+          $this.mouseup(function() {
+              // Prevent further mouseup intervention
+              $this.unbind("mouseup");
+              return false;
+          });
+      });
+      </script>
+
+  <script type="text/javascript">
+    ZeroClipboard.setDefaults({
+      trustedOrigins: [window.location.protocol + "//" + window.location.host],
+      moviePath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.2.1/ZeroClipboard.swf'
+    });
+
     {% for audioclip in audioclips %}
-
-      <li><b>{{ audioclip.0 }}</b> - {{ audioclip.2 }} <!-- (<a href="//betterembedder.appspot.com/?q={{ audioclip.0 }}">embed</a>) --></li>
+    var clip = new ZeroClipboard( document.getElementById("{{ audioclip.0 }}") );
     {% endfor %}
-    </ul>
+  </script>
 
-    {% for audioclip in audioclips %}
-    {{ audioclip.0 }}{% if not loop.last %}, {% endif%}
-    {% endfor %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    <h2>Mobile Player IDs (mobile)</h2>
+    ga('create', 'UA-39090055-2', 'cbccontentconnector.appspot.com');
+    ga('send', 'pageview');
 
-    <ul>
-    {% for audioclip in audioclips %}
-      <li><b>{{ audioclip.1 }}</b> - {{ audioclip.2 }}</li>
-    {% endfor %}
-    </ul>
-
-    {% for audioclip in audioclips %}
-    {{ audioclip.1 }}{% if not loop.last %}, {% endif%}
-    {% endfor %}
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <small>Made with love by <a href="http://misener.org">Dan Misener</a> in Toronto.</small>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-39090055-2', 'cbccontentconnector.appspot.com');
-      ga('send', 'pageview');
-
-    </script>
+  </script>
 
   </body>
 
